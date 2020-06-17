@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.dghd.web</groupId>
 	<artifactId>schedulizer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>schedulizer</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Web App for Scheduling Live Shows</description>
 
 	<properties>
 		<java.version>1.8</java.version>
