@@ -5,5 +5,16 @@
 	</head>
 	<body>
 		<h1 th:text="'This is the registration page; it is called ' + ${controllerName}">This is the registration page. You're seeing the default text.</h1>
+		<p>Please enter required info to register</p>
+		<form>
+			<label for="name">Account Name:</label>
+			<input type="text" id="name" name="name">
+			<br>
+			<label for="email">Email:</label>
+			<input type="text" id="email" name="email">
+			<br>
+			<label for="password">Password:</label>
+			<input type="text" id="password" name="password">
+		</form>
 	</body>
 </html>
