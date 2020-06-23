@@ -4,13 +4,15 @@
 		<title>Login</title>
 	</head>
 	<body>
-		<h1 th:text="'This is the login page; it is called ' + ${controllerName}">This is the login page. You're seeing the default text.</h1>
-		<form>
+		<h1>This is the login page!</h1>
+		<form action="#" th:action="@{/login}" th:object="${login}" method="post">
 			<label for="email">Email:</label>
-  			<input type="text" id="email" name="email">
+  			<input type="text" id="email" name="email" th:field="*{emailAddress}">
   			<br>
   			<label for="password">Password:</label>
-  			<input type="text" id="password" name="password">
+  			<input type="text" id="password" name="password" th:field="*{password}">
+  			<br>
+  			<input type="submit" value="Submit" />
 		</form>
 	</body>
 </html>
