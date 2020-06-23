@@ -16,6 +16,11 @@
 			<label for="password">Password:</label>
 			<input type="text" id="password" name="password" th:field="*{password}">
 			<br>
+			<label for="type">Type:</label>
+			<select id="type" name="type" th:field="*{accountType}">
+				<option th:each="accountType : ${T(com.dghd.web.schedulizer.data.account.AccountType).values()}" th:value="${accountType}" th:text="${accountType.displayValue}"></option>
+			</select>
+			<br>
 			<input type="submit" value="Submit" />
 		</form>
 	</body>
