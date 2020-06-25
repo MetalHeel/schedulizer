@@ -49,4 +49,23 @@ public class AccountManager {
 		}
 		return false;
 	}
+	
+	public String getAccountNameForCredentials(String emailAddress, String password) {
+		try {
+			Connection connection = dataManager.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(String.format("SELECT name, password_hash FROM dghd_a_account WHERE email_address = '%s'", emailAddress));
+			while (resultSet.next()) {
+				if (BCrypt.checkpw(password, resultSet.getString(2))) {
+					connection.close();
+					return resultSet.getString(1);
+				}
+			}
+			connection.close();
+		} catch (Throwable t) {
+			// TODO: Logging and error handling.
+			System.out.println(String.format("Unable to look up account: %s", t.getMessage()));
+		}
+		return null;
+	}
 }
