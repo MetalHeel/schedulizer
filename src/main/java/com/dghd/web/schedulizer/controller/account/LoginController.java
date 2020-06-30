@@ -36,6 +36,7 @@ public class LoginController {
 		return "account/login";
 	}
 	
+	// TODO: Manual URL manipulation protection.
 	@PostMapping("/login")
 	public Object loginSubmit(HttpSession session, Model model, @ModelAttribute Login login) {
 		String accountName = null;

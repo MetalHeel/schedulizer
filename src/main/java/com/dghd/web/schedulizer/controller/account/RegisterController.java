@@ -35,6 +35,7 @@ public class RegisterController {
 		return "account/register";
 	}
 	
+	// TODO: Manual URL manipulation protection.
 	@PostMapping("/register")
 	public Object registerSubmit(HttpSession session, Model model, @ModelAttribute Registration registration) {
 		try {

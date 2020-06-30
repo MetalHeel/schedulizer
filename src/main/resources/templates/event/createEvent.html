@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Add Event</title>
+	</head>
+	<body>
+		<h1>Create Event Page</h1>
+		<form action="#" th:action="@{/createEvent}" th:object="${eventCreation}" method="post">
+			<label for="name">Event Name:</label>
+  			<input type="text" id="name" name="name" th:field="*{eventName}">
+  			<br>
+  			<label for="description">Description:</label>
+  			<input type="text" id="description" name="description" th:field="*{description}">
+  			<br>
+  			<label for="banner">Banner Image:</label>
+  			<input type="text" id="banner" name="banner" th:field="*{bannerImage}">
+  			<br>
+  			<label for="poster">Poster Image:</label>
+  			<input type="text" id="poster" name="poster" th:field="*{posterImage}">
+  			<br>
+  			<label for="location">Location:</label>
+  			<input type="text" id="location" name="location" th:field="*{location}">
+  			<br>
+  			<!-- TODO: Start time. Date picker of some sort. -->
+  			<!-- TODO: End time. Date picker of some sort. -->
+  			<input type="submit" value="Submit" />
+		</form>
+	</body>
+</html>

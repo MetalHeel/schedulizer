@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-// TODO: Error handling.
 @Component("dataManager")
 public class DataManager {
 	private final String DATABASE_URL;
