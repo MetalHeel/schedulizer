@@ -21,7 +21,16 @@ public class LoginController {
 	private AccountManager accountManager;
 	
 	@GetMapping("/login")
-	public String loginLanding(Model model) {
+	public Object loginLanding(HttpSession session, Model model) {
+		LoginInformation loginInformation = null;
+		try {
+			loginInformation = (LoginInformation)session.getAttribute("loginInformation");
+		} catch (Throwable t) {
+			// Invalid session. No need to do anything.
+		}
+		if (loginInformation != null) {
+			return new RedirectView("/account");
+		}
 		model.addAttribute("login", new Login());
 		model.addAttribute("isLoginError", Boolean.FALSE);
 		return "account/login";
