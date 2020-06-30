@@ -11,7 +11,7 @@ import com.dghd.web.schedulizer.security.LoginInformation;
 @Controller
 public class AccountController {
 	@RequestMapping("/account")
-	public String accountLanding(Model model, HttpSession session) {
+	public String accountLanding(HttpSession session, Model model) {
 		LoginInformation loginInformation = null;
 		try {
 			loginInformation = (LoginInformation)session.getAttribute("loginInformation");

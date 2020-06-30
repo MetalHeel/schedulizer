@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -45,7 +44,7 @@ public class DataManager {
 			Date date = dateFormat.parse(timeString);
 			return new Timestamp(date.getTime());
 		} catch (ParseException e) {
-			// TODO: What do we do about the parse exception?
+			// Since all values are coming from internal Java functionality, this shouldn't ever happen.
 			return null;
 		}
 	}

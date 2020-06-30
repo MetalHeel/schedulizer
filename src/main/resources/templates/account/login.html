@@ -4,7 +4,7 @@
 		<title>Login</title>
 	</head>
 	<body>
-		<h1>This is the login page!</h1>
+		<p th:if="${isLoginError}" style="color:red" th:text="${errorMessage}"></p>
 		<form action="#" th:action="@{/login}" th:object="${login}" method="post">
 			<label for="email">Email:</label>
   			<input type="text" id="email" name="email" th:field="*{emailAddress}">

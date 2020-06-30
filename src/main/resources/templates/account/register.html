@@ -4,8 +4,9 @@
 		<title>Register</title>
 	</head>
 	<body>
-		<h1>This is the registration page!</h1>
-		<p>Please enter required info to register</p>
+		<h1>Registration</h1>
+		<p>Please enter the required info to register. Users can register as a band or booker.</p>
+		<p th:if="${isRegistrationError}" style="color:red" th:text="${errorMessage}"></p>
 		<form action="#" th:action="@{/register}" th:object="${registration}" method="post">
 			<label for="name">Account Name:</label>
 			<input type="text" id="name" name="name" th:field="*{accountName}">
@@ -18,7 +19,7 @@
 			<br>
 			<label for="type">Type:</label>
 			<select id="type" name="type" th:field="*{accountType}">
-				<option th:each="accountType : ${T(com.dghd.web.schedulizer.data.account.AccountType).values()}" th:value="${accountType}" th:text="${accountType.displayValue}"></option>
+				<option th:each="accountType : ${T(com.dghd.web.schedulizer.data.account.AccountType).getRegisterableValues()}" th:value="${accountType}" th:text="${accountType.displayValue}"></option>
 			</select>
 			<br>
 			<input type="submit" value="Submit" />
