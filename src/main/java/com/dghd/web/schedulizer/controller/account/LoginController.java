@@ -13,21 +13,19 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.dghd.web.schedulizer.data.manager.AccountManager;
 import com.dghd.web.schedulizer.model.account.Login;
-import com.dghd.web.schedulizer.security.LoginInformation;
+import com.dghd.web.schedulizer.security.manager.SessionManager;
+import com.dghd.web.schedulizer.security.sessionAttribute.LoginInformation;
 
 @Controller
 public class LoginController {
 	@Autowired
 	private AccountManager accountManager;
+	@Autowired
+	private SessionManager sessionManager;
 	
 	@GetMapping("/login")
 	public Object loginLanding(HttpSession session, Model model) {
-		LoginInformation loginInformation = null;
-		try {
-			loginInformation = (LoginInformation)session.getAttribute("loginInformation");
-		} catch (Throwable t) {
-			// Invalid session. No need to do anything.
-		}
+		LoginInformation loginInformation = sessionManager.getLoginInformationFromSession(session);
 		if (loginInformation != null) {
 			return new RedirectView("/account");
 		}
@@ -36,9 +34,12 @@ public class LoginController {
 		return "account/login";
 	}
 	
-	// TODO: Manual URL manipulation protection.
 	@PostMapping("/login")
 	public Object loginSubmit(HttpSession session, Model model, @ModelAttribute Login login) {
+		LoginInformation loginInformation = sessionManager.getLoginInformationFromSession(session);
+		if (loginInformation != null) {
+			return new RedirectView("/account");
+		}
 		String accountName = null;
 		try {
 			accountName = accountManager.getAccountNameForCredentials(login.getEmailAddress(), login.getPassword());
@@ -52,7 +53,7 @@ public class LoginController {
 			model.addAttribute("errorMessage", "No account found for this email/password combination.");
 			return "account/login";
 		}
-		LoginInformation loginInformation = new LoginInformation();
+		loginInformation = new LoginInformation();
 		loginInformation.setAccountName(accountName);
 		loginInformation.setEmailAddress(login.getEmailAddress());
 		session.setAttribute("loginInformation", loginInformation);

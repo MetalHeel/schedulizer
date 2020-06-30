@@ -12,21 +12,19 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.dghd.web.schedulizer.data.manager.AccountManager;
 import com.dghd.web.schedulizer.model.account.Registration;
-import com.dghd.web.schedulizer.security.LoginInformation;
+import com.dghd.web.schedulizer.security.manager.SessionManager;
+import com.dghd.web.schedulizer.security.sessionAttribute.LoginInformation;
 
 @Controller
 public class RegisterController {
 	@Autowired
 	private AccountManager accountManager;
+	@Autowired
+	private SessionManager sessionManager;
 	
 	@GetMapping("/register")
 	public Object registerLanding(HttpSession session, Model model) {
-		LoginInformation loginInformation = null;
-		try {
-			loginInformation = (LoginInformation)session.getAttribute("loginInformation");
-		} catch (Throwable t) {
-			// Invalid session. No need to do anything.
-		}
+		LoginInformation loginInformation = sessionManager.getLoginInformationFromSession(session);
 		if (loginInformation != null) {
 			return new RedirectView("/account");
 		}
@@ -35,9 +33,12 @@ public class RegisterController {
 		return "account/register";
 	}
 	
-	// TODO: Manual URL manipulation protection.
 	@PostMapping("/register")
 	public Object registerSubmit(HttpSession session, Model model, @ModelAttribute Registration registration) {
+		LoginInformation loginInformation = sessionManager.getLoginInformationFromSession(session);
+		if (loginInformation != null) {
+			return new RedirectView("/account");
+		}
 		try {
 			if (!accountManager.validateRegistration(registration)) {
 				model.addAttribute("isRegistrationError", Boolean.TRUE);
@@ -50,7 +51,7 @@ public class RegisterController {
 			model.addAttribute("errorMessage", "There was a problem creating the account. Please try again.");
 			return "account/register";
 		}
-		LoginInformation loginInformation = new LoginInformation();
+		loginInformation = new LoginInformation();
 		loginInformation.setAccountName(registration.getAccountName());
 		loginInformation.setEmailAddress(registration.getEmailAddress());
 		session.setAttribute("loginInformation", loginInformation);

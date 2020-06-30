@@ -1,4 +1,4 @@
-package com.dghd.web.schedulizer.security;
+package com.dghd.web.schedulizer.security.sessionAttribute;
 
 public class LoginInformation {
 	private String accountName;
