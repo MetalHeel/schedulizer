@@ -5,11 +5,6 @@ import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -55,23 +50,5 @@ public class DataManager {
 	
 	public String getNewId() {
 		return  UUID.randomUUID().toString().replace("-", "");
-	}
-	
-	public Timestamp getSqlDateTime() {
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String timeString = dateFormat.format(new Date().getTime());
-			Date date = dateFormat.parse(timeString);
-			return new Timestamp(date.getTime());
-		} catch (ParseException e) {
-			// Since all values are coming from internal Java functionality, this shouldn't ever happen.
-			return null;
-		}
-	}
-	
-	// TODO: Maybe create a utilities class.
-	public Date getDateFromString(String dateString) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return dateFormat.parse(dateString);
 	}
 }

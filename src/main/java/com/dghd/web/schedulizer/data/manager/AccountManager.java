@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.dghd.web.schedulizer.data.account.AccountType;
 import com.dghd.web.schedulizer.model.account.Registration;
+import com.dghd.web.schedulizer.utility.DateUtilites;
 
 @Component("accountManager")
 public class AccountManager {
@@ -21,7 +22,7 @@ public class AccountManager {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("INSERT INTO dghd_a_account (account_id,name,email_address,password_hash,profile_image,banner_image,type,description,create_time)");
 		stringBuilder.append(String.format(" VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", dataManager.getNewId(), name, emailAddress,
-				BCrypt.hashpw(password, BCrypt.gensalt()), "NULL", "NULL", type.name(), "NULL", dataManager.getSqlDateTime()));
+				BCrypt.hashpw(password, BCrypt.gensalt()), "NULL", "NULL", type.name(), "NULL", DateUtilites.getSqlTimestamp()));
 		try {
 			Statement statement = dataManager.getConnection().createStatement();
 			statement.executeUpdate(stringBuilder.toString());

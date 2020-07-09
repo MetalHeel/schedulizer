@@ -15,16 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.dghd.web.schedulizer.data.exception.DataNotFoundException;
-import com.dghd.web.schedulizer.data.manager.DataManager;
 import com.dghd.web.schedulizer.data.manager.EventManager;
 import com.dghd.web.schedulizer.model.event.EventCreation;
 import com.dghd.web.schedulizer.security.manager.SessionManager;
 import com.dghd.web.schedulizer.security.sessionAttribute.LoginInformation;
+import com.dghd.web.schedulizer.utility.DateUtilites;
 
 @Controller
 public class CreateEventController {
-	@Autowired
-	private DataManager dataManager;
 	@Autowired
 	private EventManager eventManager;
 	@Autowired
@@ -69,12 +67,11 @@ public class CreateEventController {
 		Date startTime = null;
 		Date endTime = null;
 		try {
-			// TODO: We need utilities to format these dates correctly.
-			String startTimeString = eventCreation.getStartTime().replace("T", " ").concat(":00");
-			startTime = dataManager.getDateFromString(startTimeString);
+			String startTimeString = DateUtilites.formatDateTimeLocalString(eventCreation.getStartTime());
+			startTime = DateUtilites.getDateFromString(startTimeString);
 			if (!StringUtils.isEmpty(eventCreation.getEndTime())) {
-				String endTimeString = eventCreation.getEndTime().replace("T", " ").concat(":00");
-				endTime = dataManager.getDateFromString(endTimeString);
+				String endTimeString = DateUtilites.formatDateTimeLocalString(eventCreation.getEndTime());
+				endTime = DateUtilites.getDateFromString(endTimeString);
 			}
 		} catch (Throwable t) {
 			// TODO: Better logging.

@@ -1,6 +1,5 @@
 package com.dghd.web.schedulizer.data.manager;
 
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
