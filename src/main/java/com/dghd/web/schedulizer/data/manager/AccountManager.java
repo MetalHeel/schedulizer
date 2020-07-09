@@ -1,6 +1,5 @@
 package com.dghd.web.schedulizer.data.manager;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,6 +7,7 @@ import java.sql.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.dghd.web.schedulizer.data.account.AccountType;
 import com.dghd.web.schedulizer.model.account.Registration;
@@ -23,10 +23,9 @@ public class AccountManager {
 		stringBuilder.append(String.format(" VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')", dataManager.getNewId(), name, emailAddress,
 				BCrypt.hashpw(password, BCrypt.gensalt()), "NULL", "NULL", type.name(), "NULL", dataManager.getSqlDateTime()));
 		try {
-			Connection connection = dataManager.getConnection();
-			Statement statement = connection.createStatement();
+			Statement statement = dataManager.getConnection().createStatement();
 			statement.executeUpdate(stringBuilder.toString());
-			connection.close();
+			dataManager.closeConnection();
 		} catch (Throwable t) {
 			// TODO: Better logging.
 			System.out.println(String.format("Unable to create new account: %s", t.getMessage()));
@@ -36,16 +35,15 @@ public class AccountManager {
 	
 	public String getAccountNameForCredentials(String emailAddress, String password) throws SQLException {
 		try {
-			Connection connection = dataManager.getConnection();
-			Statement statement = connection.createStatement();
+			Statement statement = dataManager.getConnection().createStatement();
 			ResultSet resultSet = statement.executeQuery(String.format("SELECT name, password_hash FROM dghd_a_account WHERE email_address = '%s'", emailAddress));
 			while (resultSet.next()) {
 				if (BCrypt.checkpw(password, resultSet.getString(2))) {
-					connection.close();
+					dataManager.closeConnection();
 					return resultSet.getString(1);
 				}
 			}
-			connection.close();
+			dataManager.closeConnection();
 		} catch (Throwable t) {
 			// TODO: Better logging.
 			System.out.println(String.format("Unable to look up account: %s", t.getMessage()));
@@ -54,17 +52,40 @@ public class AccountManager {
 		return null;
 	}
 	
+	public String getAccountIdForNameAndEmail(String accountName, String emailAddress) throws SQLException {
+		if (StringUtils.isEmpty(accountName)) {
+			return null;
+		}
+		if (StringUtils.isEmpty(emailAddress)) {
+			return null;
+		}
+		try {
+			Statement statement =  dataManager.getConnection().createStatement();
+			ResultSet resultSet = statement.executeQuery(String.format("SELECT account_id FROM dghd_a_account WHERE name = '%s' AND email_address = '%s'",
+					accountName, emailAddress));
+			if (resultSet.next()) {
+				dataManager.closeConnection();
+				return resultSet.getString(1);
+			}
+			dataManager.closeConnection();
+			return null;
+		} catch (Throwable t) {
+			// TODO: Better logging.
+			System.out.println(String.format("Unable to look up account: %s", t.getMessage()));
+			throw t;
+		}
+	}
+	
 	public boolean validateRegistration(Registration registration) throws SQLException {
 		try {
-			Connection connection = dataManager.getConnection();
-			Statement statement = connection.createStatement();
+			Statement statement = dataManager.getConnection().createStatement();
 			ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM dghd_a_account WHERE name = '%s' AND email_address = '%s'",
 					registration.getAccountName(), registration.getEmailAddress()));
 			if (resultSet.next()) {
-				connection.close();
+				dataManager.closeConnection();
 				return false;
 			}
-			connection.close();
+			dataManager.closeConnection();
 		} catch (Throwable t) {
 			// TODO: Better logging.
 			System.out.println(String.format("Error while trying to look up account [%s]: %s", registration.getAccountName(), t.getMessage()));

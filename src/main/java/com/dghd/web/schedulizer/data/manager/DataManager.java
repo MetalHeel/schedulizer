@@ -19,6 +19,7 @@ public class DataManager {
 	private final String DATABASE_URL;
 	private final String DATABASE_USERNAME;
 	private final String DATABASE_PASSWORD;
+	private Connection connection;
 	
 	public DataManager() throws URISyntaxException {
 		URI databaseUri = new URI(System.getenv("DATABASE_URL"));
@@ -28,8 +29,28 @@ public class DataManager {
 		DATABASE_PASSWORD = userInfo[1];
 	}
 	
+	/**
+	 * Will return the currently-opened connection, or create a new one if there isn't already one, to the database.
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
 	public Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+		if (connection == null) {
+			connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+		}
+		return connection;
+	}
+	
+	/**
+	 * It is HIGHLY RECOMMENDED that this is used to close the connection rather than directly closing this due to there being a
+	 * generalized connection for this singleton.
+	 * 
+	 * TODO: Do we need to close on SQLException? Or does it already happen?
+	 */
+	public void closeConnection() throws SQLException {
+		connection.close();
+		connection = null;
 	}
 	
 	public String getNewId() {
@@ -46,5 +67,11 @@ public class DataManager {
 			// Since all values are coming from internal Java functionality, this shouldn't ever happen.
 			return null;
 		}
+	}
+	
+	// TODO: Maybe create a utilities class.
+	public Date getDateFromString(String dateString) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dateFormat.parse(dateString);
 	}
 }

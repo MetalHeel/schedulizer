@@ -5,6 +5,7 @@
 	</head>
 	<body>
 		<h1>Create Event Page</h1>
+		<p th:if="${isCreateError}" style="color:red" th:text="${errorMessage}"></p>
 		<form action="#" th:action="@{/createEvent}" th:object="${eventCreation}" method="post">
 			<label for="name">Event Name:</label>
   			<input type="text" id="name" name="name" th:field="*{eventName}">
@@ -21,8 +22,12 @@
   			<label for="location">Location:</label>
   			<input type="text" id="location" name="location" th:field="*{location}">
   			<br>
-  			<!-- TODO: Start time. Date picker of some sort. -->
-  			<!-- TODO: End time. Date picker of some sort. -->
+  			<label for="start">Start Time:</label>
+			<input type="datetime-local" id="start" name="start" th:field="*{startTime}">
+  			<br>
+  			<label for="end">End Time:</label>
+			<input type="datetime-local" id="end" name="end" th:field="*{endTime}">
+			<br>
   			<input type="submit" value="Submit" />
 		</form>
 	</body>

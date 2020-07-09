@@ -1,15 +1,13 @@
 package com.dghd.web.schedulizer.model.event;
 
-import java.util.Date;
-
 public class EventCreation {
 	private String eventName;
 	private String description;
 	private String bannerImage;
 	private String posterImage;
 	private String location;
-	private Date startTime;
-	private Date endTime;
+	private String startTime;
+	private String endTime;
 	
 	public String getEventName() {
 		return eventName;
@@ -51,19 +49,19 @@ public class EventCreation {
 		this.location = location;
 	}
 	
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 	
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 	
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 }
